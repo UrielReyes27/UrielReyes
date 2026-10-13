@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
    ECOSISTEMA TECNOLÓGICO
-   Desktop: panel flotante
-   Móvil: modal amplio con backdrop y X visible
+   Desktop: panel flotante (hover)
+   Móvil: tap intencional → modal amplio con X visible
    ═══════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -53,9 +53,10 @@
   let lastFocused = null;
 
   const isMobileViewport = () => window.innerWidth < 1024;
+  const hasHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   /* ═══════════════════════════════════════════════
-     POSICIONAMIENTO DEL PANEL (solo desktop)
+     POSICIONAMIENTO (solo desktop)
      ═══════════════════════════════════════════════ */
   function positionPanel(node) {
     if (isMobileViewport()) return;
@@ -91,9 +92,7 @@
     const clampedLeft = Math.max(minLeft, Math.min(maxLeft, idealLeft));
 
     panel.style.left = `${clampedLeft}px`;
-
-    const arrowOffset = rect.left + rect.width / 2 - clampedLeft;
-    panel.style.setProperty('--arrow-x', `${arrowOffset}px`);
+    panel.style.setProperty('--arrow-x', `${rect.left + rect.width / 2 - clampedLeft}px`);
   }
 
   /* ═══════════════════════════════════════════════
@@ -134,13 +133,10 @@
     panel.classList.add('is-visible');
     panel.setAttribute('aria-hidden', 'false');
 
-    // En móvil: bloqueo scroll + backdrop + foco al cierre
     if (isMobileViewport()) {
       document.body.classList.add('no-scroll');
       document.body.classList.add('eco-modal-open');
-      requestAnimationFrame(() => {
-        panelClose?.focus();
-      });
+      requestAnimationFrame(() => panelClose?.focus());
     } else {
       requestAnimationFrame(() => positionPanel(node));
     }
@@ -148,7 +144,6 @@
 
   function deactivate() {
     const wasMobile = isMobileViewport();
-
     activeId = null;
     activeNode = null;
 
@@ -169,42 +164,78 @@
     }
   }
 
-  function scheduleClose() {
-    clearTimeout(closeTimer);
-    closeTimer = setTimeout(() => deactivate(), 260);
-  }
-
-  function cancelClose() {
-    clearTimeout(closeTimer);
-  }
-
   /* ═══════════════════════════════════════════════
      EVENTOS DE NODOS
+     ───────────────────────────────────────────────
+     Móvil: escuchamos pointerup y verificamos que el gesto
+     haya sido un TAP (movimiento < TAP_MAX_MOVE). Esto evita
+     que se abra el panel cuando el usuario está scrolleando.
+     Desktop: pointerdown + hover como antes.
      ═══════════════════════════════════════════════ */
+  const TAP_MAX_MOVE = 10;   // px de tolerancia para considerar "tap"
+
   nodes.forEach(node => {
     const id = node.dataset.tech;
-    let pointerHandled = false;
 
-    // pointerdown → respuesta inmediata en táctil
-    node.addEventListener('pointerdown', (e) => {
-      if (e.pointerType === 'touch' || e.pointerType === 'pen') {
-        pointerHandled = true;
+    if (hasHover) {
+      // ── DESKTOP: hover + click ──
+      node.addEventListener('click', (e) => {
         e.preventDefault();
         if (activeId === id) deactivate();
         else activate(id, node);
-      }
-    }, { passive: false });
+      });
 
-    node.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (pointerHandled) {
-        pointerHandled = false;
-        return;
-      }
-      if (activeId === id) deactivate();
-      else activate(id, node);
-    });
+      let hoverTimer;
+      node.addEventListener('mouseenter', () => {
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(() => activate(id, node), 160);
+        clearTimeout(closeTimer);
+      });
+      node.addEventListener('mouseleave', () => {
+        clearTimeout(hoverTimer);
+        closeTimer = setTimeout(() => deactivate(), 260);
+      });
+    } else {
+      // ── TÁCTIL: detectar tap intencional ──
+      let touchStart = null;
 
+      node.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'touch' && e.pointerType !== 'pen') return;
+        touchStart = {
+          x: e.clientX,
+          y: e.clientY,
+          pointerId: e.pointerId,
+          time: Date.now(),
+        };
+      }, { passive: true });
+
+      node.addEventListener('pointerup', (e) => {
+        if (!touchStart || touchStart.pointerId !== e.pointerId) {
+          touchStart = null;
+          return;
+        }
+
+        const dx = e.clientX - touchStart.x;
+        const dy = e.clientY - touchStart.y;
+        const dist = Math.hypot(dx, dy);
+        const elapsed = Date.now() - touchStart.time;
+
+        touchStart = null;
+
+        // Debe ser un tap claro: poco movimiento y tiempo razonable
+        if (dist > TAP_MAX_MOVE) return;
+        if (elapsed > 600) return;
+
+        if (activeId === id) deactivate();
+        else activate(id, node);
+      });
+
+      node.addEventListener('pointercancel', () => {
+        touchStart = null;
+      });
+    }
+
+    // Teclado (ambos)
     node.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -212,28 +243,17 @@
         else activate(id, node);
       }
     });
-
-    node.addEventListener('focus', () => {
-      if (!isMobileViewport()) activate(id, node);
-    });
-
-    if (!isMobileViewport()) {
-      let hoverTimer;
-      node.addEventListener('mouseenter', () => {
-        clearTimeout(hoverTimer);
-        hoverTimer = setTimeout(() => activate(id, node), 160);
-        cancelClose();
-      });
-      node.addEventListener('mouseleave', () => {
-        clearTimeout(hoverTimer);
-        scheduleClose();
-      });
-    }
   });
 
   // Panel: mantener abierto al acercar el cursor (desktop)
-  panel.addEventListener('mouseenter', cancelClose);
-  panel.addEventListener('mouseleave', scheduleClose);
+  panel.addEventListener('mouseenter', () => {
+    if (hasHover) clearTimeout(closeTimer);
+  });
+  panel.addEventListener('mouseleave', () => {
+    if (hasHover) {
+      closeTimer = setTimeout(() => deactivate(), 260);
+    }
+  });
 
   // Botón X
   panelClose?.addEventListener('click', (e) => {
@@ -242,14 +262,12 @@
     deactivate();
   });
 
-  // Click en backdrop (solo móvil)
+  // Backdrop (móvil)
   panel.addEventListener('click', (e) => {
-    if (isMobileViewport() && e.target === panel) {
-      deactivate();
-    }
+    if (isMobileViewport() && e.target === panel) deactivate();
   });
 
-  // Click fuera
+  // Click fuera (desktop)
   document.addEventListener('click', (e) => {
     if (isMobileViewport()) return;
     if (!ecosystem.contains(e.target) && !panel.contains(e.target)) {
@@ -262,7 +280,7 @@
     if (e.key === 'Escape' && activeId) deactivate();
   });
 
-  // Focus trap en móvil mientras el modal está abierto
+  // Focus trap móvil
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Tab') return;
     if (!isMobileViewport() || !activeId) return;
@@ -297,11 +315,5 @@
   }
 
   window.addEventListener('scroll', reposition, { passive: true });
-  window.addEventListener('resize', () => {
-    if (isMobileViewport() && activeId) {
-      // El panel ya está en modo modal; no hace falta reposicionar
-    } else if (!isMobileViewport()) {
-      reposition();
-    }
-  });
+  window.addEventListener('resize', reposition);
 })();
