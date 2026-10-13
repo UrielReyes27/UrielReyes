@@ -1,0 +1,52 @@
+:root {
+  /* Colores */
+  --c-bg:        #050505;
+  --c-bg-soft:   #0A0E14;
+  --c-surface:   #111111;
+  --c-surface-2: #161616;
+  --c-border:    rgba(255, 255, 255, 0.08);
+  --c-border-hi: rgba(0, 255, 135, 0.35);
+  --c-text:      #F5F5F5;
+  --c-text-soft: #A1A1AA;
+  --c-text-mute: #71717A;
+  --c-accent:    #00FF87;
+  --c-accent-dim:#00CC6A;
+  --c-accent-glow: rgba(0, 255, 135, 0.35);
+
+  /* Tipografía */
+  --f-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --f-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+  /* Espaciado */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Radios */
+  --radius-sm: 6px;
+  --radius:    12px;
+  --radius-lg: 20px;
+  --radius-full: 999px;
+
+  /* Sombras */
+  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 40px rgba(0, 255, 135, 0.15);
+
+  /* Transiciones */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur:      320ms;
+  --dur-slow: 600ms;
+
+  /* Layout */
+  --container: 1200px;
+  --nav-h: 72px;
+}

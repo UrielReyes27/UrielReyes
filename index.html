@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#050505" />
+<title>Uriel Reyes — Desarrollador Full Stack | Sistemas y Software</title>
+<meta name="description" content="Ingeniero en TICs y Desarrollador Full Stack. Automatización de procesos, sistemas empresariales y soluciones de software en PHP, .NET y Angular." />
+<meta name="author" content="Bryan Uriel Reyes Jiménez" />
+<meta property="og:title" content="Uriel Reyes — Desarrollador Full Stack" />
+<meta property="og:description" content="Construyo soluciones. Automatizo procesos. Desarrollo experiencias." />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/variables.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/intro.css" />
+<link rel="stylesheet" href="css/layout.css" />
+<link rel="stylesheet" href="css/components.css" />
+<link rel="stylesheet" href="css/sections.css" />
+<link rel="stylesheet" href="css/projects.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body class="is-loading">
+
+<!-- INTRO -->
+<div id="intro" class="intro" aria-hidden="true">
+  <canvas id="intro-canvas" class="intro__canvas"></canvas>
+  <div class="intro__stage">
+    <div class="intro__name-wrap">
+      <h1 class="intro__name" data-text="URIEL REYES">URIEL REYES</h1>
+      <div class="intro__light" aria-hidden="true"></div>
+    </div>
+    <p class="intro__tagline">SOFTWARE DEVELOPER · DIGITAL SYSTEMS</p>
+  </div>
+  <button id="intro-skip" class="intro__skip" type="button">
+    Saltar introducción
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M5 12h14M13 6l6 6-6 6"/>
+    </svg>
+  </button>
+  <div class="intro__progress" aria-hidden="true"><span></span></div>
+</div>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#inicio" class="nav__brand" aria-label="Uriel Reyes — Inicio">
+      <span class="nav__brand-mark">UR</span>
+      <span class="nav__brand-text">Uriel Reyes</span>
+    </a>
+    <nav class="nav__links" aria-label="Navegación principal">
+      <a href="#inicio"      class="nav__link is-active" data-nav>Inicio</a>
+      <a href="#sobre-mi"    class="nav__link" data-nav>Sobre mí</a>
+      <a href="#tecnologias" class="nav__link" data-nav>Tecnologías</a>
+      <a href="#proyectos"   class="nav__link" data-nav>Proyectos</a>
+      <a href="#experiencia" class="nav__link" data-nav>Experiencia</a>
+      <a href="#contacto"    class="nav__link" data-nav>Contacto</a>
+    </nav>
+    <a href="#contacto" class="nav__cta" data-nav>
+      <span>Hablemos</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </svg>
+    </a>
+    <button class="nav__toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav__mobile" id="nav-mobile">
+    <a href="#inicio"      class="nav__mobile-link" data-nav>Inicio</a>
+    <a href="#sobre-mi"    class="nav__mobile-link" data-nav>Sobre mí</a>
+    <a href="#tecnologias" class="nav__mobile-link" data-nav>Tecnologías</a>
+    <a href="#proyectos"   class="nav__mobile-link" data-nav>Proyectos</a>
+    <a href="#experiencia" class="nav__mobile-link" data-nav>Experiencia</a>
+    <a href="#contacto"    class="nav__mobile-link" data-nav>Contacto</a>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <canvas id="hero-canvas" class="hero__canvas" aria-hidden="true"></canvas>
+  <div class="hero__grid" aria-hidden="true"></div>
+  <div class="hero__glow" id="hero-glow" aria-hidden="true"></div>
+  <div class="hero__inner">
+    <p class="hero__eyebrow"><span class="hero__dot"></span> Disponible para nuevas oportunidades</p>
+    <h1 class="hero__title">
+      <span class="hero__line"><span class="hero__reveal">Construyo</span></span>
+      <span class="hero__line"><span class="hero__reveal hero__reveal--accent">soluciones.</span></span>
+      <span class="hero__line"><span class="hero__reveal">Automatizo procesos.</span></span>
+      <span class="hero__line"><span class="hero__reveal hero__reveal--muted">Desarrollo experiencias.</span></span>
+    </h1>
+    <p class="hero__lead">
+      Soy Uriel Reyes, desarrollador de software e ingeniero en TICs.
+      Transformo problemas reales en soluciones tecnológicas.
+    </p>
+    <div class="hero__tags">
+      <span>Desarrollo de software</span>
+      <span>Automatización</span>
+      <span>PHP &amp; MySQL</span>
+      <span>Sistemas empresariales</span>
+    </div>
+    <div class="hero__actions">
+      <a href="#proyectos" class="btn btn--primary" data-nav>
+        Ver mis proyectos
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M13 6l6 6-6 6"/>
+        </svg>
+      </a>
+      <a href="#contacto" class="btn btn--ghost" data-nav>Contactarme</a>
+    </div>
+  </div>
+  <a href="#sobre-mi" class="hero__scroll" data-nav aria-label="Desplazarse a Sobre mí">
+    <span class="hero__scroll-line"></span>
+    <span class="hero__scroll-text">scroll</span>
+  </a>
+</section>
+
+<!-- SOBRE MÍ -->
+<section class="section section--about" id="sobre-mi">
+  <div class="container">
+    <header class="section__head reveal">
+      <span class="section__index">01</span>
+      <h2 class="section__title">Sobre mí</h2>
+      <span class="section__line"></span>
+    </header>
+    <div class="about">
+      <div class="about__body reveal">
+        <p class="about__lead">
+          Combino el desarrollo de software con el conocimiento directo de las
+          necesidades reales de una operación empresarial.
+        </p>
+        <p>
+          Soy Ingeniero en Tecnologías de la Información y Comunicaciones con experiencia
+          en desarrollo de aplicaciones web, automatización de procesos, soporte técnico e
+          infraestructura tecnológica. Actualmente trabajo como Auxiliar de Sistemas en
+          Visión Comercial Deportiva (Wilson), donde atiendo incidencias tecnológicas y
+          desarrollo soluciones internas orientadas a optimizar procesos y mejorar la
+          eficiencia operativa.
+        </p>
+        <p>
+          Me interesa desarrollar soluciones prácticas que resuelvan problemas reales
+          mediante software.
+        </p>
+      </div>
+      <ul class="about__skills reveal">
+        <li><span class="about__skills-num">01</span> Analizar problemas operativos</li>
+        <li><span class="about__skills-num">02</span> Diseñar soluciones de software</li>
+        <li><span class="about__skills-num">03</span> Desarrollar aplicaciones</li>
+        <li><span class="about__skills-num">04</span> Automatizar tareas repetitivas</li>
+        <li><span class="about__skills-num">05</span> Comprender la infraestructura</li>
+        <li><span class="about__skills-num">06</span> Mejorar procesos con tecnología</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TECNOLOGÍAS -->
+<section class="section section--tech-ecosystem" id="tecnologias">
+  <div class="container">
+    <header class="eco-head reveal">
+      <span class="eco-head__badge">Ecosystem / Stack técnico</span>
+      <h2 class="eco-head__title">
+        Un sistema<br>
+        <em>de herramientas conectadas.</em>
+      </h2>
+      <p class="eco-head__desc">
+        Selecciona cualquier tecnología para ver su función y los proyectos
+        del portafolio donde se aplicó.
+      </p>
+    </header>
+
+    <div class="ecosystem" id="ecosystem">
+
+      <div class="eco-cluster eco-cluster--web">
+        <span class="eco-cluster__label">Desarrollo web</span>
+        <button class="tech-node" type="button" data-tech="php"
+                data-label="PHP"
+                data-desc="Lenguaje del backend en la mayoría de proyectos internos: procesamiento de XML, lógica de conciliación y APIs de los sistemas de inventario y control QR.">
+          PHP
+        </button>
+        <button class="tech-node" type="button" data-tech="javascript"
+                data-label="JavaScript"
+                data-desc="Interactividad en el frontend, validaciones y lógica cliente en el Editor XML, Inventario TI y en este portafolio.">
+          JavaScript
+        </button>
+        <button class="tech-node" type="button" data-tech="html"
+                data-label="HTML5"
+                data-desc="Estructura semántica de las interfaces web de los proyectos y de este portafolio.">
+          HTML5
+        </button>
+        <button class="tech-node" type="button" data-tech="css"
+                data-label="CSS3"
+                data-desc="Sistema de diseño, layout responsive y animaciones en los proyectos web.">
+          CSS3
+        </button>
+        <button class="tech-node" type="button" data-tech="angular"
+                data-label="Angular"
+                data-desc="Framework usado en proyectos de desarrollo web durante la etapa en Creaxid.">
+          Angular
+        </button>
+        <button class="tech-node" type="button" data-tech="dotnet"
+                data-label=".NET"
+                data-desc="Plataforma para el desarrollo de aplicaciones durante la etapa en Creaxid Experiencias Digitales.">
+          .NET
+        </button>
+        <button class="tech-node" type="button" data-tech="csharp"
+                data-label="C#"
+                data-desc="Lenguaje principal del stack .NET en los proyectos de Creaxid.">
+          C#
+        </button>
+      </div>
+
+      <div class="eco-core" aria-hidden="true">
+        <svg class="eco-core__svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet">
+          <line data-connection="php javascript html css angular dotnet csharp" x1="300" y1="300" x2="80" y2="120" />
+          <line data-connection="mysql sqlserver xml excel" x1="300" y1="300" x2="520" y2="120" />
+          <line data-connection="rest git github vscode visualstudio" x1="300" y1="300" x2="520" y2="380" />
+          <line data-connection="lan dhcp cpanel packettracer" x1="300" y1="300" x2="80" y2="480" />
+          <line data-connection="android unity arjs sap" x1="300" y1="300" x2="300" y2="560" />
+        </svg>
+        <div class="eco-core__text">
+          <span class="eco-core__line">SOFTWARE</span>
+          <span class="eco-core__line eco-core__line--accent">/ SYSTEMS /</span>
+          <span class="eco-core__line">DIGITAL SOLUTIONS</span>
+        </div>
+      </div>
+
+      <div class="eco-cluster eco-cluster--data">
+        <span class="eco-cluster__label">Datos y procesamiento</span>
+        <button class="tech-node" type="button" data-tech="mysql"
+                data-label="MySQL"
+                data-desc="Base de datos principal en los sistemas internos: conciliación, inventario, control QR y editor de XML.">
+          MySQL
+        </button>
+        <button class="tech-node" type="button" data-tech="sqlserver"
+                data-label="SQL Server"
+                data-desc="Motor de base de datos utilizado en contextos empresariales y proyectos de integración.">
+          SQL Server
+        </button>
+        <button class="tech-node" type="button" data-tech="xml"
+                data-label="XML"
+                data-desc="Formato central del Conciliador CFDI y del Editor Masivo: parseo, comparación y sustitución de nodos.">
+          XML
+        </button>
+        <button class="tech-node" type="button" data-tech="excel"
+                data-label="Excel"
+                data-desc="Salida de resultados de conciliación para revisión manual por parte del área contable.">
+          Excel
+        </button>
+      </div>
+
+      <div class="eco-cluster eco-cluster--tools">
+        <span class="eco-cluster__label">APIs y herramientas</span>
+        <button class="tech-node" type="button" data-tech="rest"
+                data-label="APIs REST"
+                data-desc="Integración entre frontend y backend en proyectos web y servicios internos.">
+          APIs REST
+        </button>
+        <button class="tech-node" type="button" data-tech="git"
+                data-label="Git"
+                data-desc="Control de versiones en todos los proyectos, con ramas y commits descriptivos.">
+          Git
+        </button>
+        <button class="tech-node" type="button" data-tech="github"
+                data-label="GitHub"
+                data-desc="Repositorios remotos, portafolio y despliegue en GitHub Pages.">
+          GitHub
+        </button>
+        <button class="tech-node" type="button" data-tech="vscode"
+                data-label="VS Code"
+                data-desc="Editor principal para el desarrollo web (HTML, CSS, JavaScript, PHP).">
+          VS Code
+        </button>
+        <button class="tech-node" type="button" data-tech="visualstudio"
+                data-label="Visual Studio"
+                data-desc="IDE usado durante la etapa en Creaxid para proyectos .NET y C#.">
+          Visual Studio
+        </button>
+      </div>
+
+      <div class="eco-cluster eco-cluster--infra">
+        <span class="eco-cluster__label">Infraestructura</span>
+        <button class="tech-node" type="button" data-tech="lan"
+                data-label="Redes LAN"
+                data-desc="Configuración y diagnóstico de redes locales en el rol de soporte en Wilson.">
+          Redes LAN
+        </button>
+        <button class="tech-node" type="button" data-tech="dhcp"
+                data-label="DHCP"
+                data-desc="Administración de direcciones IP y resolución de incidencias de conectividad.">
+          DHCP
+        </button>
+        <button class="tech-node" type="button" data-tech="cpanel"
+                data-label="cPanel"
+                data-desc="Administración de hosting y despliegue de sitios web.">
+          cPanel
+        </button>
+        <button class="tech-node" type="button" data-tech="packettracer"
+                data-label="Packet Tracer"
+                data-desc="Simulación de topologías de red y práctica formativa en Cisco.">
+          Packet Tracer
+        </button>
+      </div>
+
+      <div class="eco-cluster eco-cluster--other">
+        <span class="eco-cluster__label">Otras tecnologías</span>
+        <button class="tech-node" type="button" data-tech="android"
+                data-label="Android Studio"
+                data-desc="Herramienta utilizada en el desarrollo académico del Sistema POS para Taquería.">
+          Android Studio
+        </button>
+        <button class="tech-node" type="button" data-tech="unity"
+                data-label="Unity"
+                data-desc="Desarrollo de experiencias de realidad aumentada y virtual durante la etapa en Creaxid.">
+          Unity
+        </button>
+        <button class="tech-node" type="button" data-tech="arjs"
+                data-label="AR.js"
+                data-desc="Formación complementaria en realidad aumentada basada en web.">
+          AR.js
+        </button>
+        <button class="tech-node" type="button" data-tech="sap"
+                data-label="SAP Business One"
+                data-desc="Contexto empresarial de los procesos de conciliación sobre HANA, no como desarrollador del sistema.">
+          SAP B1
+        </button>
+      </div>
+
+      <p class="eco-hint">
+        <span class="eco-hint__dot"></span>
+        Select a technology to explore
+      </p>
+    </div>
+  </div>
+
+  <!-- Panel flotante FUERA del grid (position fixed) -->
+  <aside class="eco-detail" id="eco-detail" aria-hidden="true" aria-live="polite" role="tooltip">
+    <span class="eco-detail__label">Tecnología seleccionada</span>
+    <h3 class="eco-detail__name" id="eco-detail-name">—</h3>
+    <p class="eco-detail__desc" id="eco-detail-desc">—</p>
+    <div class="eco-detail__projects" id="eco-detail-projects" hidden>
+      <span class="eco-detail__projects-label">Proyectos relacionados</span>
+      <ul class="eco-detail__projects-list" id="eco-detail-projects-list"></ul>
+    </div>
+  </aside>
+</section>
+
+<!-- PROYECTOS -->
+<section class="section section--projects" id="proyectos">
+  <div class="container">
+    <header class="projects-head reveal">
+      <div>
+        <span class="projects-head__badge">Selected Projects / 2024 — 2026</span>
+        <h2 class="projects-head__title">
+          Soluciones que convierten<br>
+          <em>problemas en resultados.</em>
+        </h2>
+        <p class="projects-head__desc">
+          Proyectos enfocados en automatización, desarrollo de software y soluciones
+          digitales. Cada caso de estudio explora el problema, la solución y las
+          decisiones técnicas detrás del sistema.
+        </p>
+      </div>
+    </header>
+
+    <div class="projects-carousel" id="projects-carousel" tabindex="0" role="region" aria-label="Carrusel de proyectos">
+      <div class="projects-carousel__viewport">
+        <div class="projects-carousel__track" id="projects-track"></div>
+      </div>
+      <div class="projects-carousel__controls">
+        <div class="projects-carousel__nav">
+          <button class="carousel-btn" id="carousel-prev" aria-label="Proyecto anterior">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M11 18l-6-6 6-6"/>
+            </svg>
+          </button>
+          <button class="carousel-btn" id="carousel-next" aria-label="Proyecto siguiente">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </button>
+        </div>
+        <div class="projects-carousel__progress">
+          <span class="projects-carousel__index">
+            <strong id="carousel-current">01</strong> / <span id="carousel-total">06</span>
+          </span>
+          <div class="projects-carousel__bar" aria-hidden="true">
+            <span id="carousel-bar"></span>
+          </div>
+        </div>
+        <div class="projects-carousel__dots" id="carousel-dots" role="tablist" aria-label="Selector de proyecto"></div>
+      </div>
+      <p class="projects-carousel__hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M13 6l6 6-6 6"/>
+        </svg>
+        Desliza para explorar
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCIA -->
+<section class="section section--exp-narrative" id="experiencia">
+  <div class="container">
+
+    <header class="exp-head reveal">
+      <span class="exp-head__badge">Career / Trayectoria</span>
+      <h2 class="exp-head__title">
+        Dos etapas,<br>
+        <em>una misma dirección técnica.</em>
+      </h2>
+    </header>
+
+    <!-- ETAPA 01 · WILSON -->
+    <article class="exp-stage exp-stage--wilson reveal" data-stage="01">
+      <div class="exp-stage__aside">
+        <span class="exp-stage__num">01</span>
+        <span class="exp-stage__year">2025</span>
+        <span class="exp-stage__range">Ene — Actualidad</span>
+        <span class="exp-stage__location">Estado de México</span>
+      </div>
+
+      <div class="exp-stage__main">
+        <div class="exp-stage__head">
+          <p class="exp-stage__company">Visión Comercial Deportiva · Wilson</p>
+          <h3 class="exp-stage__role">Auxiliar de Sistemas</h3>
+          <span class="exp-stage__badge">Rol actual</span>
+        </div>
+
+        <p class="exp-stage__lead">
+          Perfil de TI que combina soporte técnico, administración de equipos, redes y
+          desarrollo de herramientas internas. Resuelvo incidencias operativas y
+          contribuyo a mejorar los procesos tecnológicos de la empresa.
+        </p>
+
+        <div class="exp-block">
+          <h4 class="exp-block__title">Responsabilidades</h4>
+          <ul class="exp-list">
+            <li>Soporte técnico presencial y remoto a usuarios de oficinas y sucursales.</li>
+            <li>Diagnóstico y solución de incidencias de hardware, software y conectividad.</li>
+            <li>Instalación, preparación, configuración y mantenimiento de computadoras, laptops e impresoras.</li>
+            <li>Atención de equipos e impresoras de marcas como HP, Epson y Zebra.</li>
+            <li>Configuración y diagnóstico de conectividad LAN, direcciones IP y DHCP.</li>
+            <li>Apoyo en la configuración y revisión de switches y puntos de acceso.</li>
+            <li>Administración de inventario de activos tecnológicos, seguimiento de equipos y documentación del área.</li>
+            <li>Preparación de equipos para nuevos colaboradores y apoyo en su puesta en operación.</li>
+            <li>Administración de cuentas y accesos corporativos, de acuerdo con los permisos asignados.</li>
+            <li>Apoyo en la continuidad operativa y resolución de incidencias de los usuarios.</li>
+          </ul>
+        </div>
+
+        <div class="exp-block exp-block--achievements">
+          <h4 class="exp-block__title">Aportaciones destacadas</h4>
+          <ul class="exp-list exp-list--achievements">
+            <li>Desarrollo de un sistema interno de inventario de TI con PHP y MySQL.</li>
+            <li>Implementación de procedimientos para preparar y configurar equipos.</li>
+            <li>Organización y seguimiento del inventario de activos tecnológicos.</li>
+            <li>Apoyo en la identificación y resolución de problemas de red, IP y DHCP.</li>
+            <li>Desarrollo y mantenimiento de herramientas internas para facilitar tareas operativas.</li>
+          </ul>
+        </div>
+
+        <div class="exp-block exp-block--tech">
+          <h4 class="exp-block__title">Tecnologías relacionadas</h4>
+          <div class="exp-techs">
+            <span>PHP</span>
+            <span>MySQL</span>
+            <span>SQL</span>
+            <span>HTML</span>
+            <span>CSS</span>
+            <span>JavaScript</span>
+            <span>Git</span>
+            <span>cPanel</span>
+            <span>XML</span>
+            <span>Códigos QR</span>
+            <span>Redes LAN</span>
+            <span>DHCP</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Puente -->
+    <div class="exp-bridge" aria-hidden="true">
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,60 L400,60 Q480,60 520,30 T680,30 Q720,30 760,60 L1200,60"
+              fill="none" stroke="currentColor" stroke-width="1" />
+        <circle cx="520" cy="30" r="3" />
+        <circle cx="680" cy="30" r="3" />
+        <circle cx="760" cy="60" r="3" />
+      </svg>
+      <span class="exp-bridge__label">Código → Infraestructura</span>
+    </div>
+
+    <!-- ETAPA 02 · CREAXID -->
+    <article class="exp-stage exp-stage--creaxid reveal" data-stage="02">
+      <div class="exp-stage__aside">
+        <span class="exp-stage__num">02</span>
+        <span class="exp-stage__year">2023</span>
+        <span class="exp-stage__range">Jul 2023 — Dic 2024</span>
+      </div>
+
+      <div class="exp-stage__main">
+        <div class="exp-stage__head">
+          <p class="exp-stage__company">Creaxid Experiencias Digitales</p>
+          <h3 class="exp-stage__role">Desarrollo Web / Programación</h3>
+        </div>
+
+        <p class="exp-stage__lead">
+          Desarrollo y mantenimiento de aplicaciones de software con .NET y Angular,
+          más participación en proyectos de experiencias inmersivas con Unity.
+          Aprendizaje profundo de control de versiones y trabajo en equipo.
+        </p>
+
+        <div class="exp-block">
+          <h4 class="exp-block__title">Áreas de trabajo</h4>
+          <ul class="exp-list">
+            <li>Desarrollo y mantenimiento de aplicaciones de software.</li>
+            <li>Desarrollo web con .NET y Angular.</li>
+            <li>Trabajo con Git y GitHub para control de versiones.</li>
+            <li>Participación en proyectos relacionados con Unity y experiencias de realidad aumentada o virtual.</li>
+            <li>Corrección de errores y mejora de funcionalidades existentes.</li>
+          </ul>
+        </div>
+
+        <div class="exp-block exp-block--tech">
+          <h4 class="exp-block__title">Tecnologías relacionadas</h4>
+          <div class="exp-techs">
+            <span>.NET</span>
+            <span>C#</span>
+            <span>Angular</span>
+            <span>HTML</span>
+            <span>CSS</span>
+            <span>JavaScript</span>
+            <span>Git</span>
+            <span>GitHub</span>
+            <span>Unity</span>
+            <span>Realidad Aumentada</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- FORMACIÓN -->
+    <div class="education reveal">
+      <h3 class="education__title">Formación académica</h3>
+      <div class="education__grid">
+        <div class="education__item">
+          <p class="education__degree">Ingeniería en Tecnologías de la Información y Comunicaciones</p>
+          <p class="education__school">Tecnológico de Estudios Superiores de Cuautitlán Izcalli</p>
+          <p class="education__meta">Estatus: concluida</p>
+        </div>
+        <div class="education__item">
+          <p class="education__degree">Bachillerato</p>
+          <p class="education__school">CECYTEM Tepotzotlán, Estado de México</p>
+          <p class="education__meta">2015 — 2018</p>
+        </div>
+        <div class="education__item education__item--certs">
+          <p class="education__degree">Formación complementaria</p>
+          <ul class="education__certs">
+            <li>Cisco Packet Tracer — Redes</li>
+            <li>Realidad Aumentada con AR.js</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="section section--contact" id="contacto">
+  <div class="container">
+    <div class="contact reveal">
+      <header class="section__head section__head--center">
+        <span class="section__index">05</span>
+        <h2 class="section__title">¿Tienes un proyecto o una oportunidad profesional?</h2>
+      </header>
+      <p class="contact__lead">
+        Estoy interesado en desarrollar soluciones tecnológicas, participar en
+        proyectos de software y seguir creciendo profesionalmente.
+      </p>
+      <div class="contact__actions">
+        <a href="mailto:urielrj27@gmail.com" class="btn btn--primary btn--lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16v16H4z"/><path d="m4 6 8 6 8-6"/>
+          </svg>
+          urielrj27@gmail.com
+        </a>
+        <a href="https://github.com/TU_USUARIO_GITHUB" target="_blank" rel="noopener noreferrer" class="btn btn--ghost btn--lg" data-placeholder="github">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.9 1.2 1.9 1.2 1.1 1.9 2.9 1.4 3.6 1 .1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/>
+          </svg>
+          GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/TU_USUARIO_LINKEDIN/" target="_blank" rel="noopener noreferrer" class="btn btn--ghost btn--lg" data-placeholder="linkedin">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/>
+          </svg>
+          LinkedIn
+        </a>
+      </div>
+      <p class="contact__location">Tepotzotlán, Estado de México · México</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <p>© <span id="year"></span> Uriel Reyes — Bryan Uriel Reyes Jiménez</p>
+    <p class="footer__meta">Construido con HTML, CSS y JavaScript · GitHub Pages</p>
+  </div>
+</footer>
+
+<!-- Modal de proyecto -->
+<div id="project-modal" class="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title" hidden>
+  <div class="project-modal__backdrop" data-modal-close></div>
+  <div class="project-modal__panel" id="project-modal-panel">
+    <div class="project-modal__header" id="project-modal-header"></div>
+    <div class="project-modal__body" id="project-modal-body"></div>
+  </div>
+</div>
+
+<!-- Cursor personalizado -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor__dot"></div>
+  <div class="cursor__ring"></div>
+</div>
+
+<script src="js/intro.js" defer></script>
+<script src="js/particles.js" defer></script>
+<script src="js/cursor.js" defer></script>
+<script src="js/navigation.js" defer></script>
+<script src="js/animations.js" defer></script>
+<script src="js/projects.js" defer></script>
+<script src="js/ecosystem.js" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>
