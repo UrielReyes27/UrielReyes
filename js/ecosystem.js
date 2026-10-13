@@ -1,14 +1,11 @@
 /* ═══════════════════════════════════════════════════════════
    ECOSISTEMA TECNOLÓGICO
-   Interacción + posicionamiento inteligente del panel flotante
-   Compatible con: click (desktop), pointerdown (móvil), touch
+   Desktop: panel flotante
+   Móvil: modal amplio con backdrop y X visible
    ═══════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
-  /* ═══════════════════════════════════════════════
-     MAPA DE TECNOLOGÍAS → PROYECTOS RELACIONADOS
-     ═══════════════════════════════════════════════ */
   const TECH_PROJECTS = {
     'php':           ['Conciliador CFDI', 'Editor Masivo XML', 'Control QR', 'Inventario TI'],
     'mysql':         ['Conciliador CFDI', 'Editor Masivo XML', 'Control QR', 'Inventario TI'],
@@ -36,9 +33,6 @@
     'sap':           ['Contexto empresarial']
   };
 
-  /* ═══════════════════════════════════════════════
-     INICIALIZACIÓN
-     ═══════════════════════════════════════════════ */
   const ecosystem = document.getElementById('ecosystem');
   if (!ecosystem) return;
 
@@ -56,11 +50,8 @@
   let activeId = null;
   let activeNode = null;
   let closeTimer = null;
+  let lastFocused = null;
 
-  /* ═══════════════════════════════════════════════
-     DETECCIÓN DE DISPOSITIVO — ROBUSTA
-     ═══════════════════════════════════════════════ */
-  const hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
   const isMobileViewport = () => window.innerWidth < 1024;
 
   /* ═══════════════════════════════════════════════
@@ -112,6 +103,7 @@
     if (activeId === id) return;
     activeId = id;
     activeNode = node;
+    lastFocused = node;
 
     clearTimeout(closeTimer);
 
@@ -142,21 +134,24 @@
     panel.classList.add('is-visible');
     panel.setAttribute('aria-hidden', 'false');
 
-    // Desktop → posicionar flotante
-    if (!isMobileViewport()) {
-      requestAnimationFrame(() => positionPanel(node));
-    } else {
-      // Móvil → scroll al panel inline
+    // En móvil: bloqueo scroll + backdrop + foco al cierre
+    if (isMobileViewport()) {
+      document.body.classList.add('no-scroll');
+      document.body.classList.add('eco-modal-open');
       requestAnimationFrame(() => {
-        const y = panel.getBoundingClientRect().top + window.scrollY - 100;
-        window.scrollTo({ top: y, behavior: 'smooth' });
+        panelClose?.focus();
       });
+    } else {
+      requestAnimationFrame(() => positionPanel(node));
     }
   }
 
   function deactivate() {
+    const wasMobile = isMobileViewport();
+
     activeId = null;
     activeNode = null;
+
     nodes.forEach(n => {
       n.classList.remove('is-active', 'is-dimmed');
       n.setAttribute('aria-pressed', 'false');
@@ -164,6 +159,14 @@
     connections.forEach(c => c.classList.remove('is-lit'));
     panel.classList.remove('is-visible');
     panel.setAttribute('aria-hidden', 'true');
+
+    if (wasMobile) {
+      document.body.classList.remove('no-scroll');
+      document.body.classList.remove('eco-modal-open');
+      if (lastFocused && document.contains(lastFocused)) {
+        lastFocused.focus({ preventScroll: true });
+      }
+    }
   }
 
   function scheduleClose() {
@@ -177,14 +180,12 @@
 
   /* ═══════════════════════════════════════════════
      EVENTOS DE NODOS
-     Usamos 'pointerdown' para respuesta inmediata en táctil,
-     y 'click' para teclado + mouse formal.
      ═══════════════════════════════════════════════ */
   nodes.forEach(node => {
     const id = node.dataset.tech;
     let pointerHandled = false;
 
-    // pointerdown → respuesta inmediata en táctil (evita el delay de 300ms)
+    // pointerdown → respuesta inmediata en táctil
     node.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'touch' || e.pointerType === 'pen') {
         pointerHandled = true;
@@ -194,7 +195,6 @@
       }
     }, { passive: false });
 
-    // click → ratón y teclado
     node.addEventListener('click', (e) => {
       e.preventDefault();
       if (pointerHandled) {
@@ -205,7 +205,6 @@
       else activate(id, node);
     });
 
-    // Teclado
     node.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -214,13 +213,11 @@
       }
     });
 
-    // Focus por teclado (sin activar en táctil)
     node.addEventListener('focus', () => {
-      if (!hasTouch) activate(id, node);
+      if (!isMobileViewport()) activate(id, node);
     });
 
-    // Hover (solo desktop con hover fino)
-    if (!hasTouch) {
+    if (!isMobileViewport()) {
       let hoverTimer;
       node.addEventListener('mouseenter', () => {
         clearTimeout(hoverTimer);
@@ -234,42 +231,77 @@
     }
   });
 
-  // Mantener panel abierto al mover el cursor hacia él (desktop)
+  // Panel: mantener abierto al acercar el cursor (desktop)
   panel.addEventListener('mouseenter', cancelClose);
   panel.addEventListener('mouseleave', scheduleClose);
 
-  // Botón de cerrar dentro del panel (móvil y desktop)
+  // Botón X
   panelClose?.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
     deactivate();
   });
 
-  // Click fuera → desactivar
+  // Click en backdrop (solo móvil)
+  panel.addEventListener('click', (e) => {
+    if (isMobileViewport() && e.target === panel) {
+      deactivate();
+    }
+  });
+
+  // Click fuera
   document.addEventListener('click', (e) => {
+    if (isMobileViewport()) return;
     if (!ecosystem.contains(e.target) && !panel.contains(e.target)) {
       deactivate();
     }
   });
 
-  // Escape → desactivar
+  // Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && activeId) deactivate();
   });
 
-  // Reposicionar en scroll/resize (desktop)
+  // Focus trap en móvil mientras el modal está abierto
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    if (!isMobileViewport() || !activeId) return;
+
+    const focusables = panel.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusables.length) return;
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+
+  // Reposicionar en scroll/resize (solo desktop)
   let rafId = null;
   function reposition() {
     if (!activeNode || !activeId) return;
+    if (isMobileViewport()) return;
     if (rafId) return;
     rafId = requestAnimationFrame(() => {
       rafId = null;
-      if (!isMobileViewport()) positionPanel(activeNode);
+      positionPanel(activeNode);
     });
   }
 
   window.addEventListener('scroll', reposition, { passive: true });
   window.addEventListener('resize', () => {
-    if (!isMobileViewport()) reposition();
+    if (isMobileViewport() && activeId) {
+      // El panel ya está en modo modal; no hace falta reposicionar
+    } else if (!isMobileViewport()) {
+      reposition();
+    }
   });
 })();

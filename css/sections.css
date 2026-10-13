@@ -409,11 +409,15 @@
   font-size: clamp(0.78rem, 1.6vw, 1rem);
 }
 
-/* ─── Panel flotante (desktop) ─── */
+/* ═══════════════════════════════════════════════════════════
+   PANEL DE DETALLE
+   Desktop → flotante (position: fixed)
+   Móvil → modal centrado con backdrop
+   ═══════════════════════════════════════════════════════════ */
 .eco-detail {
   position: fixed;
   z-index: 9000;
-  width: min(340px, calc(100vw - 32px));
+  width: min(360px, calc(100vw - 32px));
   max-height: 60vh;
   overflow-y: auto;
   padding: var(--space-5) var(--space-6);
@@ -466,22 +470,26 @@
 
 .eco-detail__close {
   position: absolute;
-  top: 8px; right: 8px;
-  width: 28px; height: 28px;
+  top: 10px; right: 10px;
+  width: 32px; height: 32px;
   display: grid; place-items: center;
   border-radius: 50%;
-  border: 1px solid var(--c-border);
-  background: rgba(0,0,0,0.4);
-  color: var(--c-text-soft);
+  border: 1px solid rgba(0,255,135,0.3);
+  background: rgba(0,0,0,0.5);
+  color: var(--c-accent);
   cursor: pointer;
   transition: all 220ms var(--ease);
   z-index: 2;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.eco-detail__close:hover {
-  color: var(--c-accent);
-  border-color: rgba(0,255,135,0.5);
+.eco-detail__close:hover,
+.eco-detail__close:focus-visible {
+  background: rgba(0,255,135,0.15);
   transform: rotate(90deg);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--c-accent);
 }
 
 .eco-detail__label {
@@ -496,7 +504,7 @@
   font-size: 1.05rem; font-weight: 600;
   color: var(--c-text); margin-bottom: var(--space-3);
   letter-spacing: -0.01em;
-  padding-right: 24px;
+  padding-right: 32px;
 }
 
 .eco-detail__desc {
@@ -548,10 +556,7 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   EXPERIENCIA · NARRATIVA EDITORIAL
-   ═══════════════════════════════════════════════════════════ */
-
+/* ═══ EXPERIENCIA ═══ */
 .section--exp-narrative {
   position: relative;
   padding: var(--space-32) 0;
@@ -681,7 +686,6 @@
   max-width: 68ch;
 }
 
-/* Bloques */
 .exp-block { position: relative; }
 
 .exp-block__title {
@@ -707,7 +711,6 @@
   box-shadow: 0 0 8px #39FF14;
 }
 
-/* Collapsible */
 .exp-block--collapsible {
   border-bottom: 1px solid var(--c-border);
   padding-bottom: var(--space-3);
@@ -727,7 +730,6 @@
 }
 
 .exp-block--collapsible > summary::-webkit-details-marker { display: none; }
-
 .exp-block--collapsible > summary:hover { color: #fff; }
 
 .exp-block__chevron {
@@ -809,11 +811,8 @@
   transform: translateY(-1px);
 }
 
-.exp-block__title--static {
-  justify-content: flex-start;
-}
+.exp-block__title--static { justify-content: flex-start; }
 
-/* Puente */
 .exp-bridge {
   position: relative;
   height: 120px;
@@ -932,6 +931,111 @@
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
 
+/* ─── MÓVIL: eco-detail como modal centrado con backdrop ─── */
+@media (max-width: 1023px) {
+  body.eco-modal-open {
+    overflow: hidden;
+  }
+
+  body.eco-modal-open::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 8999;
+    opacity: 0;
+    animation: eco-backdrop-in 240ms var(--ease) forwards;
+  }
+
+  @keyframes eco-backdrop-in {
+    to { opacity: 1; }
+  }
+
+  .eco-detail {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -46%) scale(0.96);
+    width: calc(100vw - 24px);
+    max-width: 520px;
+    max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 48px);
+    padding: var(--space-6);
+    padding-top: calc(var(--space-6) + env(safe-area-inset-top, 0px));
+    border-radius: var(--radius-lg);
+    z-index: 9001;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.85),
+      0 0 60px rgba(0,255,135,0.12);
+    border: 1px solid rgba(0,255,135,0.35);
+  }
+
+  .eco-detail.is-visible {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+
+  .eco-detail::before { display: none !important; }
+
+  .eco-detail__close {
+    position: sticky;
+    top: 0;
+    margin-left: auto;
+    display: grid;
+    width: 40px;
+    height: 40px;
+    top: 0;
+    right: auto;
+    margin-bottom: -40px;
+    float: right;
+    z-index: 5;
+  }
+
+  .eco-detail__label {
+    font-size: 0.65rem;
+    margin-bottom: var(--space-2);
+    padding-right: 48px;
+  }
+
+  .eco-detail__name {
+    font-size: 1.35rem;
+    padding-right: 48px;
+    margin-bottom: var(--space-3);
+  }
+
+  .eco-detail__desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: var(--space-5);
+  }
+
+  .eco-detail__projects {
+    padding-top: var(--space-5);
+  }
+
+  .eco-detail__projects-label {
+    font-size: 0.65rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .eco-detail__projects-list { gap: 8px; }
+
+  .eco-detail__projects-list li {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+  }
+
+  /* Ocultar núcleo SVG en móvil */
+  .eco-core { display: none; }
+  .eco-core__svg { display: none; }
+}
+
 @media (max-width: 1024px) {
   .about { grid-template-columns: 1fr; gap: var(--space-10); }
 
@@ -970,13 +1074,6 @@
     left: 0; right: auto;
   }
 
-  .eco-core {
-    grid-column: 1 / -1;
-    grid-row: 4;
-    max-width: 380px;
-    margin: var(--space-8) auto 0;
-  }
-
   .eco-hint { grid-row: 5; }
 
   .exp-stage {
@@ -997,7 +1094,6 @@
   .exp-stage__location { margin-top: 0; }
 }
 
-/* ─── MÓVIL ─── */
 @media (max-width: 768px) {
   .hero {
     min-height: auto;
@@ -1014,33 +1110,20 @@
     margin-bottom: var(--space-6);
   }
   .hero__tags { gap: 6px; margin-bottom: var(--space-6); }
-  .hero__tags span {
-    font-size: 0.7rem;
-    padding: 5px 10px;
-  }
+  .hero__tags span { font-size: 0.7rem; padding: 5px 10px; }
   .hero__actions { gap: var(--space-2); }
   .hero__actions .btn { flex: 1; min-width: 0; padding: 12px 18px; font-size: 0.85rem; }
   .hero__scroll { display: none; }
   .hero__glow { width: 320px; height: 320px; }
   .hero__eyebrow { font-size: 0.68rem; padding: 5px 10px; margin-bottom: var(--space-5); }
 
-  /* SOBRE MÍ */
   .section { padding: var(--space-16) 0; }
   .section__head { margin-bottom: var(--space-8); gap: var(--space-3); }
   .section__title { font-size: clamp(1.5rem, 7vw, 2rem); }
-  .about__lead {
-    font-size: 1.05rem;
-    line-height: 1.45;
-    margin-bottom: var(--space-4);
-  }
+  .about__lead { font-size: 1.05rem; line-height: 1.45; margin-bottom: var(--space-4); }
   .about__body p { font-size: 0.92rem; line-height: 1.65; }
-  .about__skills li {
-    padding: var(--space-3) 0;
-    font-size: 0.88rem;
-    gap: var(--space-3);
-  }
+  .about__skills li { padding: var(--space-3) 0; font-size: 0.88rem; gap: var(--space-3); }
 
-  /* TECNOLOGÍAS */
   .section--tech-ecosystem { padding: var(--space-16) 0; }
   .eco-head { margin-bottom: var(--space-10); }
   .eco-head__title { font-size: clamp(1.6rem, 8vw, 2.25rem); margin-bottom: var(--space-4); }
@@ -1064,9 +1147,7 @@
     padding-right: 0 !important;
     margin-bottom: var(--space-2);
   }
-  .eco-cluster__label::before {
-    left: 0 !important; right: auto !important;
-  }
+  .eco-cluster__label::before { left: 0 !important; right: auto !important; }
   .eco-cluster .tech-node {
     text-align: left !important;
     font-size: 0.78rem;
@@ -1078,56 +1159,7 @@
     border-radius: 0 2px 2px 0 !important;
   }
   .eco-cluster .tech-node:hover,
-  .eco-cluster .tech-node.is-active {
-    transform: translateX(3px) !important;
-  }
-
-  /* Ocultar el núcleo SVG en móvil para reducir ruido visual */
-  .eco-core {
-    display: none;
-  }
-  .eco-core__svg { display: none; }
-
-  /* Panel: en móvil → INLINE (dentro del flujo) */
-  .eco-detail {
-    position: relative !important;
-    inset: auto !important;
-    top: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    right: auto !important;
-    width: 100% !important;
-    max-width: none;
-    max-height: none;
-    margin: var(--space-5) 0 0;
-    padding: var(--space-5);
-    transform: translateY(8px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 260ms var(--ease), transform 260ms var(--ease), visibility 260ms;
-    order: 100;
-  }
-
-  .eco-detail.is-visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .eco-detail::before { display: none !important; }
-
-  .eco-detail__close {
-    width: 32px;
-    height: 32px;
-    top: 10px;
-    right: 10px;
-  }
-
-  .eco-detail__name { font-size: 1rem; }
-  .eco-detail__desc { font-size: 0.85rem; }
-  .eco-detail__projects-list li { font-size: 0.68rem; padding: 3px 9px; }
+  .eco-cluster .tech-node.is-active { transform: translateX(3px) !important; }
 
   .eco-hint {
     grid-column: 1 / -1 !important;
@@ -1135,28 +1167,15 @@
     margin-top: var(--space-4);
     font-size: 0.6rem;
     letter-spacing: 0.2em;
-    order: 101;
   }
 
-  /* EXPERIENCIA */
   .section--exp-narrative { padding: var(--space-16) 0; }
   .exp-head { margin-bottom: var(--space-10); }
   .exp-head__title { font-size: clamp(1.6rem, 8vw, 2.25rem); }
 
-  .exp-stage {
-    padding: var(--space-8) 0;
-    gap: var(--space-5);
-  }
-  .exp-stage__aside {
-    flex-direction: row;
-    align-items: baseline;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-  }
-  .exp-stage__year {
-    font-size: clamp(2rem, 12vw, 3rem);
-    line-height: 1;
-  }
+  .exp-stage { padding: var(--space-8) 0; gap: var(--space-5); }
+  .exp-stage__aside { flex-direction: row; align-items: baseline; gap: var(--space-3); flex-wrap: wrap; }
+  .exp-stage__year { font-size: clamp(2rem, 12vw, 3rem); line-height: 1; }
   .exp-stage__range,
   .exp-stage__location { font-size: 0.65rem; }
   .exp-stage__company { font-size: 0.7rem; margin-bottom: var(--space-2); }
@@ -1164,19 +1183,11 @@
   .exp-stage__lead { font-size: 0.92rem; line-height: 1.65; }
   .exp-stage__main { gap: var(--space-5); }
 
-  .exp-block__title {
-    font-size: 0.62rem;
-    padding-bottom: var(--space-2);
-    margin-bottom: var(--space-3);
-  }
+  .exp-block__title { font-size: 0.62rem; padding-bottom: var(--space-2); margin-bottom: var(--space-3); }
   .exp-block--collapsible > summary { padding: var(--space-2) 0; }
 
   .exp-list { gap: var(--space-2); }
-  .exp-list li {
-    padding-left: var(--space-5);
-    font-size: 0.85rem;
-    line-height: 1.6;
-  }
+  .exp-list li { padding-left: var(--space-5); font-size: 0.85rem; line-height: 1.6; }
   .exp-list li::before { width: 8px; top: 0.7em; }
 
   .exp-techs { gap: 5px; }
@@ -1191,7 +1202,6 @@
   .education__school { font-size: 0.8rem; }
   .education__certs li { font-size: 0.8rem; }
 
-  /* PROYECTOS / CONTACTO */
   .contact__actions .btn { width: 100%; }
   .contact__lead { font-size: 0.95rem; margin: var(--space-5) 0 var(--space-8); }
 }
@@ -1203,10 +1213,14 @@
   .hero__tags span { font-size: 0.65rem; padding: 4px 9px; }
 
   .eco-head__title { font-size: clamp(1.5rem, 9vw, 2rem); }
-  .eco-core { max-width: 220px; }
 
-  .eco-detail { padding: var(--space-4); }
-  .eco-detail__name { font-size: 0.95rem; }
+  .eco-detail {
+    width: calc(100vw - 20px);
+    padding: var(--space-5);
+  }
+  .eco-detail__name { font-size: 1.15rem; }
+  .eco-detail__desc { font-size: 0.9rem; }
+  .eco-detail__projects-list li { font-size: 0.7rem; padding: 4px 10px; }
 
   .exp-stage { padding: var(--space-6) 0; }
   .exp-stage__role { font-size: 1.2rem; }
@@ -1220,7 +1234,6 @@
   .exp-bridge svg path { animation: none; stroke-dashoffset: 0; }
   .eco-hint__dot,
   .hero__dot { animation: none; }
-  .exp-block--collapsible[open] > .exp-list {
-    animation: none;
-  }
+  .exp-block--collapsible[open] > .exp-list { animation: none; }
+  body.eco-modal-open::before { animation: none; opacity: 1; }
 }

@@ -1,17 +1,15 @@
 /* ═══════════════════════════════════════════════════════════
-   PROYECTOS — Carrusel Premium + Modal Amplio con Galería
+   PROYECTOS — Carrusel editorial + Modal amplio
    ═══════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
-  /* ═══════════════════════════════════════════════
-     CATÁLOGO DE PROYECTOS
-     ═══════════════════════════════════════════════ */
   const PROJECTS = [
     {
       id: 'pos-taqueria',
       num: '01',
       title: 'Sistema POS para Taquería',
+      subtitle: 'Pedidos · Cocina · Caja',
       tagline: 'Sistema académico que conecta pedidos desde tablets, comandas en cocina y cobro en caja.',
       techs: ['Android Studio'],
       preview: 'pos',
@@ -40,7 +38,8 @@
       id: 'conciliador-cfdi',
       num: '02',
       title: 'Conciliador CFDI',
-      tagline: 'Herramienta de automatización para comparar archivos XML de facturas entre información del SAT y SAP.',
+      subtitle: 'Automatización documental',
+      tagline: 'Comparación de archivos XML para detectar facturas faltantes, duplicadas o canceladas.',
       techs: ['PHP', 'MySQL', 'XML', 'Excel'],
       preview: 'cfdi',
       problem: 'La conciliación manual de facturas XML entre el SAT y SAP implicaba revisar grandes volúmenes de documentos, detectar faltantes, duplicados y cancelados. El proceso podía consumir días de trabajo.',
@@ -63,7 +62,8 @@
       id: 'editor-xml',
       num: '03',
       title: 'Editor Masivo de XML',
-      tagline: 'Localiza y reemplaza múltiples valores en archivos XML, reduciendo el trabajo manual sobre grandes cantidades de documentos.',
+      subtitle: 'Procesamiento por lotes',
+      tagline: 'Búsqueda y reemplazo de múltiples valores en archivos XML de forma simultánea.',
       techs: ['PHP', 'MySQL', 'HTML', 'CSS', 'JavaScript', 'XML'],
       preview: 'xml',
       problem: 'Corregir folios, fechas y códigos en cientos de archivos XML manualmente era una tarea lenta, repetitiva y propensa a errores.',
@@ -85,6 +85,7 @@
       id: 'control-qr',
       num: '04',
       title: 'Control de Salida con QR',
+      subtitle: 'Digitalización de autorizaciones',
       tagline: 'Sistema para digitalizar el flujo de salida de equipos mediante solicitudes, autorizaciones y códigos QR.',
       techs: ['PHP', 'MySQL'],
       preview: 'qr',
@@ -106,6 +107,7 @@
       id: 'inventario-ti',
       num: '05',
       title: 'Control de Inventario TI',
+      subtitle: 'Gestión de activos tecnológicos',
       tagline: 'Aplicación para administrar activos tecnológicos y facilitar el seguimiento de equipos de cómputo.',
       techs: ['PHP', 'MySQL', 'HTML', 'CSS', 'JavaScript'],
       preview: 'inv',
@@ -128,6 +130,7 @@
       id: 'desarrollo-web',
       num: '06',
       title: 'Desarrollo de Páginas Web',
+      subtitle: 'Interfaces digitales modernas',
       tagline: 'Creación de sitios web modernos, interfaces responsivas y experiencias digitales funcionales.',
       techs: ['HTML5', 'CSS3', 'JavaScript', 'Angular'],
       preview: 'web',
@@ -150,7 +153,7 @@
   ];
 
   /* ═══════════════════════════════════════════════
-     RENDERIZADO DE PREVIEWS VISUALES
+     PREVIEWS VISUALES
      ═══════════════════════════════════════════════ */
   const previews = {
     pos: () => `
@@ -190,8 +193,8 @@
       </div>`,
 
     'pos-tablet': () => `
-      <div class="preview-pos">
-        <div class="preview-pos__device" style="grid-column: 1 / -1; max-width: 320px; margin: 0 auto;">
+      <div class="preview-pos preview-pos--single">
+        <div class="preview-pos__device">
           <div class="preview-pos__device-head">
             <span>Tablet · Mesa 4</span>
             <span class="preview-pos__dot"></span>
@@ -200,7 +203,7 @@
           <div class="preview-pos__item"><span>Agua horchata ×1</span><span>$25</span></div>
           <div class="preview-pos__item"><span>Quesadilla ×1</span><span>$35</span></div>
           <div class="preview-pos__item preview-pos__item--muted"><span>Salsa extra</span><span>$0</span></div>
-          <div class="preview-pos__total" style="margin-top:auto;border-top:1px solid var(--c-border)">
+          <div class="preview-pos__total" style="border-top:1px solid var(--c-border);margin-top:auto">
             <span>Subtotal</span><strong>$105</strong>
           </div>
           <div class="preview-pos__cta">Enviar a cocina</div>
@@ -208,8 +211,8 @@
       </div>`,
 
     'pos-kitchen': () => `
-      <div class="preview-pos">
-        <div class="preview-pos__kitchen" style="grid-column: 1 / -1;">
+      <div class="preview-pos preview-pos--single">
+        <div class="preview-pos__kitchen">
           <div class="preview-pos__device-head">
             <span>Cocina · Vista de comandas</span>
             <span class="preview-pos__dot preview-pos__dot--amber"></span>
@@ -222,8 +225,8 @@
       </div>`,
 
     'pos-cash': () => `
-      <div class="preview-pos">
-        <div class="preview-pos__cash" style="grid-column: 1 / -1; max-width: 340px; margin: 0 auto;">
+      <div class="preview-pos preview-pos--single">
+        <div class="preview-pos__cash">
           <div class="preview-pos__device-head">
             <span>Caja · Ticket #128</span>
             <span class="preview-pos__dot preview-pos__dot--green"></span>
@@ -352,10 +355,11 @@
   if (!track) return;
 
   track.innerHTML = PROJECTS.map((p, i) => `
-    <article class="project-slide ${i === 0 ? 'is-active' : ''}" data-id="${p.id}" data-index="${i}">
+    <article class="project-slide ${i === 0 ? 'is-active' : ''} ${p.featured ? 'is-featured' : ''}" data-id="${p.id}" data-index="${i}">
       <div class="project-slide__info">
         <span class="project-slide__num">Proyecto ${p.num}</span>
         <h3 class="project-slide__title">${p.title}</h3>
+        ${p.subtitle ? `<p class="project-slide__subtitle">${p.subtitle}</p>` : ''}
         <p class="project-slide__tagline">${p.tagline}</p>
         <div class="project-slide__techs">
           ${p.techs.slice(0, 4).map(t => `<span>${t}</span>`).join('')}
@@ -398,7 +402,6 @@
 
   function updateCarousel(animate = true) {
     const step = getStepSize();
-    // Centrar el slide activo con padding lateral
     const viewport = track.parentElement;
     const viewportW = viewport.getBoundingClientRect().width;
     const slideW = slides[0].getBoundingClientRect().width;
@@ -434,7 +437,6 @@
   nextBtn?.addEventListener('click', () => goTo(currentIndex + 1));
   dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
 
-  /* ── Teclado (solo cuando el foco está en el carrusel) ── */
   carousel?.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight') { e.preventDefault(); goTo(currentIndex + 1); }
     if (e.key === 'ArrowLeft')  { e.preventDefault(); goTo(currentIndex - 1); }
@@ -452,7 +454,6 @@
     startTx = currentIndex * getStepSize();
     viewport.classList.add('is-dragging');
     track.classList.add('is-no-transition');
-    track.setPointerCapture?.(e.pointerId);
   }
 
   function onPointerMove(e) {
@@ -473,9 +474,6 @@
     const dx = e.clientX - startX;
     if (Math.abs(dx) > 60) {
       goTo(dx < 0 ? currentIndex + 1 : currentIndex - 1);
-    } else if (!moved) {
-      // Click limpio sobre el slide → no abre modal (solo en el CTA)
-      updateCarousel();
     } else {
       updateCarousel();
     }
@@ -486,17 +484,13 @@
   viewport?.addEventListener('pointerup', onPointerUp);
   viewport?.addEventListener('pointercancel', onPointerUp);
   viewport?.addEventListener('pointerleave', onPointerUp);
-
-  // Prevenir arrastre de imágenes
   viewport?.addEventListener('dragstart', e => e.preventDefault());
 
   window.addEventListener('resize', () => updateCarousel(false));
-
-  // Init
   requestAnimationFrame(() => updateCarousel(false));
 
   /* ═══════════════════════════════════════════════
-     MODAL
+     MODAL DE PROYECTO
      ═══════════════════════════════════════════════ */
   const modal        = document.getElementById('project-modal');
   const modalHeader  = document.getElementById('project-modal-header');
@@ -512,6 +506,7 @@
     modalHeader.innerHTML = `
       <p class="project-modal__eyebrow">Proyecto ${p.num}</p>
       <h3 class="project-modal__title" id="project-modal-title">${p.title}</h3>
+      ${p.subtitle ? `<p class="project-modal__subtitle">${p.subtitle}</p>` : ''}
       <p class="project-modal__tagline">${p.tagline}</p>
       <button class="project-modal__close" data-modal-close aria-label="Cerrar detalle del proyecto">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -527,24 +522,24 @@
     `).join('');
 
     const galleryDots = p.gallery.map((g, i) =>
-      `<button class="pd-gallery__dot ${i === 0 ? 'is-active' : ''}" data-gallery-goto="${i}" aria-label="Ver imagen ${i + 1}: ${g.caption}"></button>`
+      `<button class="pd-gallery__dot ${i === 0 ? 'is-active' : ''}" data-gallery-goto="${i}" aria-label="Ver vista ${i + 1}: ${g.caption}"></button>`
     ).join('');
 
     modalBody.innerHTML = `
       <section class="pd-section">
-        <h4 class="pd-section__head">Galería del proyecto</h4>
+        <h4 class="pd-section__head">Vista del proyecto</h4>
         <div class="pd-gallery" id="pd-gallery">
           <div class="pd-gallery__stage" id="pd-gallery-stage">
             ${gallerySlides}
           </div>
           <div class="pd-gallery__controls">
             <div class="pd-gallery__nav">
-              <button class="pd-gallery__btn" id="pd-gallery-prev" aria-label="Imagen anterior">
+              <button class="pd-gallery__btn" id="pd-gallery-prev" aria-label="Vista anterior">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M19 12H5M11 18l-6-6 6-6"/>
                 </svg>
               </button>
-              <button class="pd-gallery__btn" id="pd-gallery-next" aria-label="Imagen siguiente">
+              <button class="pd-gallery__btn" id="pd-gallery-next" aria-label="Vista siguiente">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M5 12h14M13 6l6 6-6 6"/>
                 </svg>
@@ -557,7 +552,7 @@
       </section>
 
       <section class="pd-section">
-        <h4 class="pd-section__head">Contexto</h4>
+        <h4 class="pd-section__head">Problema y solución</h4>
         <div class="pd-grid-2">
           <div class="pd-card">
             <h5>Problema</h5>
@@ -598,7 +593,7 @@
       </div>
     `;
 
-    initGallery();
+    initGallery(p);
 
     modal.hidden = false;
     requestAnimationFrame(() => modal.classList.add('is-open'));
@@ -616,8 +611,7 @@
     }, 400);
   }
 
-  /* ── Galería interna ── */
-  function initGallery() {
+  function initGallery(p) {
     const slides = modalBody.querySelectorAll('.pd-gallery__slide');
     const dots   = modalBody.querySelectorAll('.pd-gallery__dot');
     const prev   = modalBody.querySelector('#pd-gallery-prev');
@@ -627,7 +621,6 @@
 
     let idx = 0;
     const total = slides.length;
-    const p = PROJECTS.find(x => modalHeader.textContent.includes(x.title));
 
     function update() {
       slides.forEach((s, i) => {
@@ -635,7 +628,7 @@
         s.setAttribute('aria-hidden', String(i !== idx));
       });
       dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
-      if (caption && p) caption.textContent = p.gallery[idx].caption;
+      if (caption) caption.textContent = p.gallery[idx].caption;
       if (prev) prev.disabled = idx === 0;
       if (next) next.disabled = idx === total - 1;
     }
@@ -647,7 +640,6 @@
     update();
   }
 
-  /* ── Delegación de eventos ── */
   document.addEventListener('click', e => {
     const openBtn = e.target.closest('[data-open-project]');
     if (openBtn) {
@@ -665,15 +657,11 @@
     if (e.key === 'Escape' && modal && !modal.hidden) closeModal();
   });
 
-  /* ═══════════════════════════════════════════════
-     REVEAL / OBSERVER
-     ═══════════════════════════════════════════════ */
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) {
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
   }
 
-  /* Red de seguridad */
   window.addEventListener('load', () => {
     setTimeout(() => {
       document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => {
