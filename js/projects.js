@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
    PROYECTOS — Carrusel editorial + Modal amplio
+   Gestos táctiles con detección de dirección
    ═══════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -442,48 +443,123 @@
     if (e.key === 'ArrowLeft')  { e.preventDefault(); goTo(currentIndex - 1); }
   });
 
-  /* ── Drag / Swipe ── */
+  /* ═══════════════════════════════════════════════
+     DRAG / SWIPE CON DETECCIÓN DE DIRECCIÓN
+     ───────────────────────────────────────────────
+     Reglas:
+       1. Esperamos al menos THRESHOLD_DIR px de movimiento
+          para decidir si el gesto es horizontal o vertical.
+       2. Si es vertical → NO capturamos el gesto; el navegador
+          hace el scroll normal de la página.
+       3. Si es horizontal → aplicamos transform al track.
+       4. Solo cambiamos de slide si supera SWIPE_THRESHOLD en X.
+       5. Los movimientos pequeños (< 8px) se ignoran completamente.
+     ═══════════════════════════════════════════════ */
   const viewport = track.parentElement;
-  let dragging = false, startX = 0, startTx = 0, moved = false;
+
+  const THRESHOLD_DIR   = 10;  // px mínimos para decidir dirección
+  const SWIPE_THRESHOLD = 60;  // px mínimos para cambiar de slide
+  const SMALL_MOVE      = 8;   // px por debajo → no es un gesto
+
+  let gesture = null; // { pointerId, startX, startY, startTx, direction }
+
+  function getOffset() {
+    const viewportW = viewport.getBoundingClientRect().width;
+    const slideW = slides[0].getBoundingClientRect().width;
+    return (viewportW - slideW) / 2;
+  }
 
   function onPointerDown(e) {
+    // No interferir con clicks del CTA ni con el modal
     if (e.target.closest('.project-slide__cta')) return;
-    dragging = true;
-    moved = false;
-    startX = e.clientX;
-    startTx = currentIndex * getStepSize();
-    viewport.classList.add('is-dragging');
-    track.classList.add('is-no-transition');
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+    gesture = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      startTx: currentIndex * getStepSize(),
+      direction: null, // 'h' | 'v' | null
+    };
   }
 
   function onPointerMove(e) {
-    if (!dragging) return;
-    const dx = e.clientX - startX;
-    if (Math.abs(dx) > 4) moved = true;
-    const viewportW = viewport.getBoundingClientRect().width;
-    const slideW = slides[0].getBoundingClientRect().width;
-    const offset = (viewportW - slideW) / 2;
-    track.style.transform = `translate3d(${-startTx + dx + offset}px, 0, 0)`;
-  }
+    if (!gesture || gesture.pointerId !== e.pointerId) return;
 
-  function onPointerUp(e) {
-    if (!dragging) return;
-    dragging = false;
-    viewport.classList.remove('is-dragging');
-    track.classList.remove('is-no-transition');
-    const dx = e.clientX - startX;
-    if (Math.abs(dx) > 60) {
-      goTo(dx < 0 ? currentIndex + 1 : currentIndex - 1);
-    } else {
-      updateCarousel();
+    const dx = e.clientX - gesture.startX;
+    const dy = e.clientY - gesture.startY;
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+
+    // ── Fase 1: decidir dirección ──
+    if (gesture.direction === null) {
+      // Movimiento demasiado pequeño → esperar
+      if (absDx < SMALL_MOVE && absDy < SMALL_MOVE) return;
+
+      // Necesitamos al menos THRESHOLD_DIR en alguna dirección
+      if (absDx < THRESHOLD_DIR && absDy < THRESHOLD_DIR) return;
+
+      // Decidir según el eje dominante
+      if (absDx > absDy * 1.2) {
+        // Horizontal confirmado → capturamos el gesto
+        gesture.direction = 'h';
+        viewport.classList.add('is-dragging');
+        track.classList.add('is-no-transition');
+        try { viewport.setPointerCapture(e.pointerId); } catch (_) {}
+      } else {
+        // Vertical → NO capturamos. Dejamos que el navegador scrollee.
+        gesture.direction = 'v';
+        return;
+      }
+    }
+
+    // ── Fase 2: si es horizontal, movemos el track ──
+    if (gesture.direction === 'h') {
+      const offset = getOffset();
+      track.style.transform = `translate3d(${-gesture.startTx + dx + offset}px, 0, 0)`;
     }
   }
 
-  viewport?.addEventListener('pointerdown', onPointerDown);
-  viewport?.addEventListener('pointermove', onPointerMove);
+  function onPointerUp(e) {
+    if (!gesture || gesture.pointerId !== e.pointerId) {
+      gesture = null;
+      return;
+    }
+
+    const dx = e.clientX - gesture.startX;
+    const direction = gesture.direction;
+
+    viewport.classList.remove('is-dragging');
+    track.classList.remove('is-no-transition');
+
+    // Si nunca se decidió dirección (tap sin movimiento), no hacer nada
+    if (direction === 'h') {
+      // Cambiar de slide solo si supera el umbral
+      if (Math.abs(dx) >= SWIPE_THRESHOLD) {
+        goTo(dx < 0 ? currentIndex + 1 : currentIndex - 1);
+      } else {
+        // Snap de vuelta al slide actual
+        updateCarousel();
+      }
+    }
+    // Si direction === 'v' o null → el navegador gestiona el scroll normal
+
+    gesture = null;
+  }
+
+  function onPointerCancel(e) {
+    if (!gesture || gesture.pointerId !== e.pointerId) return;
+    viewport.classList.remove('is-dragging');
+    track.classList.remove('is-no-transition');
+    // Snap de vuelta sin cambiar slide
+    updateCarousel();
+    gesture = null;
+  }
+
+  viewport?.addEventListener('pointerdown', onPointerDown, { passive: true });
+  viewport?.addEventListener('pointermove', onPointerMove, { passive: true });
   viewport?.addEventListener('pointerup', onPointerUp);
-  viewport?.addEventListener('pointercancel', onPointerUp);
-  viewport?.addEventListener('pointerleave', onPointerUp);
+  viewport?.addEventListener('pointercancel', onPointerCancel);
   viewport?.addEventListener('dragstart', e => e.preventDefault());
 
   window.addEventListener('resize', () => updateCarousel(false));
@@ -612,22 +688,22 @@
   }
 
   function initGallery(p) {
-    const slides = modalBody.querySelectorAll('.pd-gallery__slide');
-    const dots   = modalBody.querySelectorAll('.pd-gallery__dot');
+    const gallerySlides = modalBody.querySelectorAll('.pd-gallery__slide');
+    const galleryDots   = modalBody.querySelectorAll('.pd-gallery__dot');
     const prev   = modalBody.querySelector('#pd-gallery-prev');
     const next   = modalBody.querySelector('#pd-gallery-next');
     const caption = modalBody.querySelector('#pd-gallery-caption');
-    if (!slides.length) return;
+    if (!gallerySlides.length) return;
 
     let idx = 0;
-    const total = slides.length;
+    const total = gallerySlides.length;
 
     function update() {
-      slides.forEach((s, i) => {
+      gallerySlides.forEach((s, i) => {
         s.classList.toggle('is-active', i === idx);
         s.setAttribute('aria-hidden', String(i !== idx));
       });
-      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+      galleryDots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
       if (caption) caption.textContent = p.gallery[idx].caption;
       if (prev) prev.disabled = idx === 0;
       if (next) next.disabled = idx === total - 1;
@@ -635,7 +711,7 @@
 
     prev?.addEventListener('click', () => { if (idx > 0) { idx--; update(); } });
     next?.addEventListener('click', () => { if (idx < total - 1) { idx++; update(); } });
-    dots.forEach((d, i) => d.addEventListener('click', () => { idx = i; update(); }));
+    galleryDots.forEach((d, i) => d.addEventListener('click', () => { idx = i; update(); }));
 
     update();
   }
